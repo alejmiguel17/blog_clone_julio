@@ -1,19 +1,127 @@
 {% extends "_base.html" %}
 
 {% block content %}
-    <h1>{{ post.title }}</h1>
-    <p>Autor: {{ post.author.username }}</p>
-    <p>Publicado el {{ post.created_at|date:"d/m/Y"}}</p>
-    <p>Última actualización: {{ post.updated_at|date:"d/m/Y"}}</p>
-    <p>{{ post.content }}</p>
+<style>
+    /* Estilos generales */
+    .post-detail-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Título del post */
+    .post-title {
+        color: #2c3e50;
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #3498db;
+    }
+
+    /* Metadatos */
+    .post-meta {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .post-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .post-meta i {
+        font-style: normal;
+        color: #3498db;
+    }
+
+    /* Contenido del post */
+    .post-content {
+        line-height: 1.8;
+        font-size: 1.1rem;
+        color: #34495e;
+        margin-bottom: 2rem;
+        white-space: pre-line;
+    }
+
+    /* Botones de acción */
+    .post-actions {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .post-actions a {
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .edit-btn {
+        background-color: #3498db;
+        color: white;
+        border: 1px solid #2980b9;
+    }
+
+    .edit-btn:hover {
+        background-color: #2980b9;
+    }
+
+    .delete-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: 1px solid #c0392b;
+    }
+
+    .delete-btn:hover {
+        background-color: #c0392b;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .post-detail-container {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+        
+        .post-title {
+            font-size: 1.8rem;
+        }
+        
+        .post-meta {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+</style>
+
+<div class="post-detail-container">
+    <h1 class="post-title">{{ post.title }}</h1>
     
-    <!-- validar si el usuario es el autor del post para poder editarlo -->
+    <div class="post-meta">
+        <span><i>Autor:</i> {{ post.author.username }}</span>
+        <span><i>Publicado:</i> {{ post.created_at|date:"d/m/Y" }}</span>
+        <span><i>Actualizado:</i> {{ post.updated_at|date:"d/m/Y" }}</span>
+    </div>
+    
+    <div class="post-content">{{ post.content }}</div>
+    
     {% if user.is_authenticated and user == post.author %}
-        <a href="{% url 'post-update' post.id %}">Editar</a>
-        <a href="{% url 'post-delete' post.id %}">Eliminar</a>
+        <div class="post-actions">
+            <a href="{% url 'post-update' post.id %}" class="edit-btn">Editar</a>
+            <a href="{% url 'post-delete' post.id %}" class="delete-btn">Eliminar</a>
+        </div>
     {% endif %}
-
-    
+</div>
 {% endblock %}
-
 
